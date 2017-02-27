@@ -1,0 +1,33 @@
+---
+- name: install rpcbind
+  yum:
+    name=rpcbind
+    state=present
+  tags: nfs-client
+
+- name: start rpcbind
+  service:
+    name=rpcbind
+    state=started
+    enabled=yes
+  tags: nfs-client
+
+- name: create nfs directory
+  file: path={{ nfs.client_directory }}
+        recurse=yes
+        state=directory
+        owner=nfsnobody
+        group=nfsnobody
+  tags: nfs-client
+
+- name: mount nfs directory
+  mount:
+    name={{ nfs.client_directory }}
+    src={{ nfs.server_host }}:{{ nfs.server_directory }}
+    fstype=nfs
+    state=mounted
+  tags: nfs-client
+
+#- name: exportfs
+#  command: exportfs -ra
+#  tags: nfs-client

@@ -1,0 +1,46 @@
+---
+- name: add GPG key
+  rpm_key:
+    state: present
+    key: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+  tags:
+    - kibana
+
+- name: copy kibana.repo to /etc/yum.repos.d
+  template:
+    src: kibana.repo.j2
+    dest: /etc/yum.repos.d/kibana.repo
+  tags:
+    - kibana
+
+- name: install kibana
+  yum:
+    name: kibana
+    state: present
+  tags:
+    - kibana
+
+- name: set server.host to kibana.yml
+  lineinfile:
+    dest: /etc/kibana/kibana.yml
+    regexp: "^#?\\s?server.host:"
+    line: "server.host: 0.0.0.0"
+  notify: restart kibana
+  tags:
+    - kibana
+
+- name: set elasticsearch.url to kibana.yml
+  lineinfile:
+    dest: /etc/kibana/kibana.yml
+    regexp: "^#?\\s?#elasticsearch.url:"
+    line: "elasticsearch.url: \"http://192.168.33.12:9200\""
+  notify: restart kibana
+  tags:
+    - kibana
+
+- name: start kibana and enabled on boot
+  service:
+    name: kibana
+    enabled: true
+  tags:
+    - kibana

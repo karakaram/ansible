@@ -1,0 +1,26 @@
+---
+- name: install vim
+  yum:
+    name=vim-enhanced
+    state=present
+  tags:
+    - common
+    - vim
+
+- name: copy vimrc for root
+  template:
+    src=vimrc.j2
+    dest=/root/.vimrc
+  tags:
+    - common
+    - vim
+
+- name: copy vimrc for work user
+  template:
+    src=vimrc.j2
+    dest=/home/{{ user.name }}/.vimrc
+    owner={{ user.name }}
+    group={{ user.name }}
+  tags:
+    - common
+    - vim

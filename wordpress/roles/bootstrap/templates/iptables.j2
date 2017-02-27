@@ -1,0 +1,19 @@
+*filter
+:INPUT DROP [0:0]
+:FORWARD DROP [0:0]
+:OUTPUT ACCEPT [0:0]
+-A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+-A INPUT -p icmp -j ACCEPT
+-A INPUT -i lo -j ACCEPT
+-A INPUT -p tcp -m tcp --dport {{ ssh.port }} -j ACCEPT
+-A INPUT -p tcp -m hashlimit --dport {{ ssh.port }} --hashlimit-name ssh --hashlimit 2/m --hashlimit-burst 10 --hashlimit-mode srcip --hashlimit-htable-expire 60000 -j ACCEPT
+-A INPUT -p tcp -m tcp --dport 80 -j ACCEPT
+-A INPUT -d 255.255.255.255 -j DROP
+-A INPUT -d 224.0.0.1 -j DROP
+-A INPUT -p udp -m multiport --dport 137,138,139,445 -j DROP
+-A INPUT -p udp --dport 17500 -j DROP
+-N LOGGING
+-A LOGGING -j LOG --log-prefix "DROP:" -m limit --limit 3/hour
+-A LOGGING -j DROP
+-A INPUT -j LOGGING
+COMMIT

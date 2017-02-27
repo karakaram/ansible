@@ -1,0 +1,18 @@
+---
+- name: install java-1.8.0-openjdk
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - java-1.8.0-openjdk
+#    - java-1.8.0-openjdk-devel
+  tags:
+    - elasticsearch
+
+#- name: install java-1.8.0-openjdk-debuginfo
+#  yum:
+#    name: java-1.8.0-openjdk-debuginfo
+#    state: present
+#    enablerepo: "*debug*"
+#  tags:
+#    - elasticsearch

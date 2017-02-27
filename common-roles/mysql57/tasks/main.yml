@@ -1,0 +1,141 @@
+- name: install mysql-community repository
+  yum:
+    name=http://dev.mysql.com/get/mysql57-community-release-el{{ os.version }}-8.noarch.rpm
+  tags: mysql
+
+- name: enable mysql5.7
+  ini_file: dest=/etc/yum.repos.d/mysql-community.repo
+            section={{ item }}
+            option=enabled
+            value=1
+  with_items:
+    - mysql57-community
+  tags: mysql
+
+- name: install MySQL community server
+  yum:
+    name={{ item }}
+    state=present
+  with_items:
+      - mysql-community-server
+      - MySQL-python
+  tags: mysql
+
+- name: copy my.cnf
+  template:
+    src=my.cnf.j2
+    dest=/etc/my.cnf
+  tags: mysql
+
+- name: create log directory
+  file:
+    path=/var/log/mysql
+    state=directory
+    mode="u=rwx,g=rx,o=rx"
+    owner=mysql
+    group=mysql
+    recurse=yes
+  tags: mysql
+
+- name: register status of slow.log
+  stat: path=/var/log/mysql/slow.log
+  register: f
+  tags: mysql
+
+- name: create slow.log
+  file:
+    path=/var/log/mysql/slow.log
+    state=touch
+    owner=mysql
+    group=mysql
+    mode=0644
+  when: not f.stat.exists
+  tags: mysql
+
+- name: start mysqld and enabled at boot
+  service:
+    name=mysqld
+    state=started
+    enabled=yes
+  tags: mysql
+
+- name: get default root password
+  shell: grep 'A temporary password' /var/log/mysqld.log | awk '{ print $NF }' | head -n 1
+  register: mysql_default_root_password
+  changed_when: False
+  tags: mysql
+
+# - name: debug default_root_password
+#   debug: var=mysql_default_root_password.stdout_lines
+#   when: mysql_default_root_password | success
+#   tags: mysql
+
+- name: check login for mysql with default root password
+  shell: mysqladmin ping -uroot -p"{{ mysql_default_root_password.stdout }}"
+  register: login_result_with_default_root_password
+  failed_when: False
+  changed_when: False
+  tags: mysql
+
+# - name: debug login_result_with_default_root_password
+#   debug: var=login_result_with_default_root_password
+#   tags: mysql
+
+- name: set validate_password_policy to LOW
+  shell: mysql --connect-expired-password -uroot -p"{{ mysql_default_root_password.stdout }}" -e "{{ item }}"
+  when: login_result_with_default_root_password.stderr.find('Access denied') == -1
+  with_items:
+    - "SET GLOBAL validate_password_length = 6"
+    - "SET GLOBAL validate_password_mixed_case_count = 0"
+    - "SET GLOBAL validate_password_number_count = 0"
+    - "SET GLOBAL validate_password_special_char_count = 0"
+    - "SET GLOBAL validate_password_policy = 'LOW'"
+  tags: mysql
+
+- name: set mysql root password
+  shell: mysql --connect-expired-password -uroot -p"{{ mysql_default_root_password.stdout }}" -e "ALTER USER root@'localhost' IDENTIFIED BY '{{ mysql.root_password }}'"
+  when: login_result_with_default_root_password.stderr.find('Access denied') == -1
+  tags: mysql
+
+- name: remove anonymous user
+  mysql_user:
+    name=""
+    host={{ item }}
+    state="absent"
+    login_user=root
+    login_password={{ mysql.root_password }}
+  with_items:
+    - localhost
+  tags: mysql
+
+- name: remove test database
+  mysql_db:
+    name=test
+    state=absent
+    login_user=root
+    login_password={{ mysql.root_password }}
+  tags: mysql
+
+- name: create database
+  mysql_db:
+    name={{ item.name }}
+    state=present
+    login_user=root
+    login_password={{ mysql.root_password }}
+  with_items:
+    - "{{ mysql_databases }}"
+  tags: mysql
+
+- name: create work user
+  mysql_user:
+    name={{ mysql.user }}
+    password={{ mysql.password }}
+    host=localhost
+    append_privs=true
+    priv={{ item.priv }}
+    state=present
+    login_user=root
+    login_password={{ mysql.root_password }}
+  with_items:
+    - "{{ mysql_databases }}"
+  tags: mysql

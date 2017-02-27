@@ -1,0 +1,52 @@
+---
+- name: add GPG key for elasticsearch curator
+  rpm_key:
+    state: present
+    key: https://packages.elastic.co/GPG-KEY-elasticsearch
+  tags:
+    - elasticsearch
+    - elasticsearch-curator
+
+- name: copy curator.repo to /etc/yum.repos.d
+  template:
+    src: curator.repo.j2
+    dest: /etc/yum.repos.d/curator.repo
+  tags:
+    - elasticsearch
+    - elasticsearch-curator
+
+- name: install elasticsearch-curator
+  yum:
+    name: elasticsearch-curator
+    state: present
+  tags:
+    - elasticsearch
+    - elasticsearch-curator
+
+- name: create configuration directory for elasticsearch-curator
+  file:
+    path: "/home/{{ user.name }}/.curator"
+    state: directory
+    mode: 0755
+  become: "{{ user.name }}"
+  tags:
+    - elasticsearch
+    - elasticsearch-curator
+
+- name: copy configuration file for elasticsearch-curator
+  template:
+    src: curator.yml.j2
+    dest: "/home/{{ user.name }}/.curator/curator.yml"
+  become: "{{ user.name }}"
+  tags:
+    - elasticsearch
+    - elasticsearch-curator
+
+- name: copy delete_indices_action file for elasticsearch-curator
+  template:
+    src: delete_indices.yml.j2
+    dest: "/home/{{ user.name }}/.curator/delete_indices.yml"
+  become: "{{ user.name }}"
+  tags:
+    - elasticsearch
+    - elasticsearch-curator

@@ -1,0 +1,15 @@
+---
+- hosts: elasticsearch
+  user: "{{ user.name }}"
+  become: yes
+  roles:
+    - ../common-roles/common/selinux
+    - ../common-roles/common/timezone
+    - ../common-roles/common/chrony
+    - ../common-roles/fluentd/install
+    - ../common-roles/fluentd/install-plugin-elasticsearch
+    - ../common-roles/fluentd/server-source
+    - ../common-roles/fluentd/server-apache
+    - ../common-roles/fluentd/server-nginx
+    - ../common-roles/openjdk18
+    - ../common-roles/elasticsearch

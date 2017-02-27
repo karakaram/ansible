@@ -1,0 +1,13 @@
+---
+- hosts: client
+  user: "{{ user.name }}"
+  become: yes
+  roles:
+    - ../common-roles/common/selinux
+    - ../common-roles/common/timezone
+    - ../common-roles/common/chrony
+    - ../common-roles/apache
+    - ../common-roles/nginx/install
+    - ../common-roles/fluentd/install
+    - ../common-roles/fluentd/client-apache
+    - ../common-roles/fluentd/client-nginx

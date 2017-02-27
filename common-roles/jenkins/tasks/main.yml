@@ -1,0 +1,37 @@
+---
+# Do not work on ansible 2.2.0
+#- name: install jenkins repository
+#  yum_repository:
+#    name: jenkins
+#    description: Jenkins YUM repo
+#    baseurl: http://pkg.jenkins-ci.org/redhat/jenkins.repo
+#  tags: jenkins
+- name: Ensure Jenkins repo is installed.
+  get_url:
+    url: http://pkg.jenkins-ci.org/redhat/jenkins.repo
+    dest: /etc/yum.repos.d/jenkins.repo
+
+- name: install jenkins rpm key
+  rpm_key:
+    key=https://jenkins-ci.org/redhat/jenkins-ci.org.key
+    state=present
+
+- name: install jenkins
+  yum:
+    name=jenkins
+    state=present
+  tags: jenkins
+
+- name: install java
+  yum:
+    name=java
+    state=present
+  tags: jenkins
+
+- name: start jenkins and enabled at boot
+  service:
+    name=jenkins
+    state=started
+    enabled=yes
+  tags: jenkins
+

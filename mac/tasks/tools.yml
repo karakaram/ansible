@@ -1,0 +1,130 @@
+---
+# Prezto
+- name: install Prezto
+  git: repo=https://github.com/sorin-ionescu/prezto.git
+    dest=~/.zprezto
+    update=no
+
+- name: link in prezto files
+  file:
+    src=~/.zprezto/runcoms/{{ item }}
+    path=~/.{{ item }}
+    state=link
+  with_items:
+    - zlogin
+    - zlogout
+    - zprofile
+    - zshenv
+    - zshrc
+
+- name: link .zshrc
+  file:
+    src=~/icloud/conf/dotfiles/.zshrc
+    path=~/.zshrc
+    state=link
+
+- name: link to preztorc
+  file:
+    src=~/icloud/conf/dotfiles/.zpreztorc
+    path=~/.zpreztorc
+    state=link
+
+# solarized
+- name: clone Solarized
+  git: repo=https://github.com/altercation/solarized.git
+    dest=~/var/lib/solarized
+
+# Ricty
+- name: clone RictyDiminished-for-Powerline
+  git: repo=https://github.com/mzyy94/RictyDiminished-for-Powerline.git
+    dest=~/var/lib/RictyDiminished-for-Powerline
+
+# NeoBundle
+- name: clone NeoBundle
+  git: repo=https://github.com/Shougo/neobundle.vim
+    dest=~/.vim/bundle/neobundle.vim
+    update=no
+
+# phpbrew
+- name: download phpbrew
+  get_url:
+    url=https://github.com/phpbrew/phpbrew/raw/master/phpbrew
+    dest=/usr/local/bin/phpbrew
+    mode=0755
+
+- name: check if composer is installed
+  stat: path=/usr/local/bin/composer
+  register: f
+
+- name: download composer installer
+  get_url:
+    url=https://getcomposer.org/installer
+    dest=/tmp/composer-installer.php
+    mode=0755
+  when: not f.stat.exists
+
+- name: run composer installer
+  command:
+    php composer-installer.php
+    chdir=/tmp
+  when: not f.stat.exists
+
+- name: move composer into globally accessible location
+  command: mv /tmp/composer.phar /usr/local/bin/composer
+  when: not f.stat.exists
+
+# Symfony installer
+- name: regist status of symfony installer
+  stat: path=/usr/local/bin/symfony
+  register: f
+
+- name: download symfony installer
+  shell: curl -LsS http://symfony.com/installer -o /usr/local/bin/symfony
+  when: not f.stat.exists
+
+- name: Change permission for symfony installer
+  file: path=/usr/local/bin/symfony mode="a+x"
+
+# Vagrant plugin
+- name: regist list of vagrant plugin
+  shell: "vagrant plugin list | awk '{print $1}'"
+  register: f
+
+- name: install vagrant plugin
+  shell: "vagrant plugin install {{ item }}"
+  with_items:
+    - sahara
+    - vagrant-cachier
+    - vagrant-global-status
+    - vagrant-omnibus
+    - vagrant-vbguest
+    - vagrant-vbox-snapshot
+    - vagrant-global-status
+    - vagrant-bindfs
+  when: item not in f.stdout_lines
+
+- name: update vagrant plugin
+  shell: "vagrant plugin update {{ item }}"
+  with_items:
+    - sahara
+    - vagrant-cachier
+    - vagrant-global-status
+    - vagrant-omnibus
+    - vagrant-vbguest
+    - vagrant-vbox-snapshot
+    - vagrant-global-status
+    - vagrant-bindfs
+  when: item in f.stdout_lines
+
+# bin/hidden-file
+- name: is exists hidden-file
+  stat: path=~/icloud/bin/hidden-file
+  register: f
+
+- name: link hidden-file
+  file:
+    src=~/icloud/bin/hidden-file
+    dest=~/bin/hidden-file
+    state=link
+  when: f.stat.exists
+

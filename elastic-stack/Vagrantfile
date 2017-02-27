@@ -1,0 +1,70 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure(2) do |config|
+
+  config.vm.box = "bento/centos-7.2"
+
+  # config.ssh.insert_key = false
+  # config.ssh.forward_agent = true
+  config.vm.box_check_update = false
+  if Vagrant.has_plugin?("vagrant-vbguest")
+    config.vbguest.auto_update = false
+  end
+  if Vagrant.has_plugin?("vagrant-cachier")
+    config.cache.scope = :box
+  end
+
+  config.vm.define "client" do |vm|
+    vm.vm.hostname = "client"
+    vm.vm.network "private_network", ip: "192.168.33.11"
+    vm.vm.provider "virtualbox" do |vb|
+      vb.gui = false
+      vb.memory = "1024"
+      vb.cpus = "2"
+    end
+    vm.vm.provision "ansible" do |ansible|
+      ansible.verbose = "v"
+      ansible.playbook = "client.yml"
+      ansible.inventory_path = "vagrant"
+      ansible.limit = "all"
+      # ansible.tags = ""
+    end
+  end
+
+  config.vm.define "elasticsearch" do |vm|
+    vm.vm.hostname = "elasticsearch"
+    vm.vm.network "private_network", ip: "192.168.33.12"
+    vm.vm.provider "virtualbox" do |vb|
+      vb.gui = false
+      vb.memory = "2048"
+      vb.cpus = "2"
+    end
+    vm.vm.provision "ansible" do |ansible|
+      ansible.verbose = "v"
+      ansible.playbook = "elasticsearch.yml"
+      ansible.inventory_path = "vagrant"
+      ansible.limit = "all"
+      # ansible.tags = ""
+    end
+  end
+
+  config.vm.define "kibana" do |vm|
+    vm.vm.hostname = "kibana"
+    vm.vm.network "private_network", ip: "192.168.33.13"
+    vm.vm.provider "virtualbox" do |vb|
+      vb.gui = false
+      vb.memory = "1024"
+      vb.cpus = "2"
+    end
+    vm.vm.provision "ansible" do |ansible|
+      ansible.verbose = "v"
+      ansible.playbook = "kibana.yml"
+      ansible.inventory_path = "vagrant"
+      ansible.limit = "all"
+      # ansible.tags = ""
+    end
+  end
+
+
+end

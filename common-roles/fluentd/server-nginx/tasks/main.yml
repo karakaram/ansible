@@ -1,0 +1,19 @@
+---
+- name: set td-agent.conf
+  blockinfile:
+    dest: /etc/td-agent/td-agent.conf
+    block: |
+      <match nginx.access>
+        @type elasticsearch
+        host localhost
+        port 9200
+        #type_name nginx-access
+        logstash_format true
+        logstash_prefix nginx-access
+        #flush_interval 1s
+      </match>
+    marker: "# {mark} NGINX ACCESS ANSIBLE MANAGED BLOCK"
+  notify: restart fluentd
+  tags:
+    - fluentd
+    - fluentd-server-nginx

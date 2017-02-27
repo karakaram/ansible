@@ -1,0 +1,9 @@
+[nfs-server]
+192.168.33.11
+
+[nfs-client]
+192.168.33.12
+
+[vagrant:children]
+nfs-server
+nfs-client

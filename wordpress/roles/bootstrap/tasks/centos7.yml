@@ -1,0 +1,23 @@
+---
+- include: ../common-roles/common/firewalld/main.yml
+
+- name: updating firewall rules
+  firewalld:
+    service={{ item }}
+    permanent=true
+    state=enabled
+  with_items:
+    - ssh
+    - http
+  tags: firewalld
+
+- name: copy ssh.xml
+  command: cp -p /usr/lib/firewalld/services/ssh.xml /etc/firewalld/services
+  tags: firewalld
+
+- name: change port for ssh
+  replace:
+    dest=/etc/firewalld/services/ssh.xml
+    regexp='<port protocol="tcp" port="22"\/>'
+    replace='<port protocol="tcp" port="{{ ssh.port }}"/>'
+  tags: firewalld

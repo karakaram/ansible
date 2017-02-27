@@ -1,0 +1,23 @@
+---
+- name: set td-agent.conf
+  blockinfile:
+    dest: /etc/td-agent/td-agent.conf
+    block: |
+      <source>
+        @type tail
+        path /var/log/httpd/access_log
+        format apache2
+        pos_file /var/log/td-agent/httpd_access_log.pos
+        tag apache.access
+      </source>
+      <match apache.access>
+        @type forward
+        host 192.168.33.12
+        port 24224
+        #flush_interval 1s
+      </match>
+    marker: "# {mark} APACHE ACCESS ANSIBLE MANAGED BLOCK"
+  notify: restart fluentd
+  tags:
+    - fluentd
+    - fluentd-client-apache

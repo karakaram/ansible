@@ -1,0 +1,7 @@
+---
+- hosts: rundeck
+  user: "{{ user.name }}"
+  become: yes
+  roles:
+    - ../common-roles/common/timezone
+    - ../common-roles/rundeck

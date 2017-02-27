@@ -1,0 +1,9 @@
+---
+- hosts: nfs-server
+  user: "{{ user.name }}"
+  become: yes
+  roles:
+    - ../common-roles/common/timezone
+    - ../common-roles/common/selinux
+    - ../common-roles/common/firewall
+    - ../common-roles/nfs-server

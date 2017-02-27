@@ -1,0 +1,144 @@
+---
+- name: install mysql-community repository
+  yum: name=http://dev.mysql.com/get/mysql-community-release-el{{ os.version }}-8.noarch.rpm state=present
+  tags: mysql
+
+- name: disable mysql5.7
+  ini_file: dest=/etc/yum.repos.d/mysql-community.repo
+            section={{ item }}
+            option=enabled
+            value=0
+  with_items:
+    - mysql57-community-dmr
+  tags: mysql
+
+- name: enable mysql5.6
+  ini_file: dest=/etc/yum.repos.d/mysql-community.repo
+            section={{ item }}
+            option=enabled
+            value=1
+  with_items:
+    - mysql56-community
+  tags: mysql
+
+- name: install MySQL community server
+  yum: name={{ item }} state=present
+  with_items:
+      - mysql-community-server
+      - MySQL-python
+  tags: mysql
+
+- name: copy my.cnf
+  template:
+    src=my.cnf.j2
+    dest=/etc/my.cnf
+  tags: mysql
+
+- name: create log directory
+  file:
+    path=/var/log/mysql
+    state=directory
+    mode="u=rw,g=r,o=r"
+    owner=mysql
+    group=mysql
+    recurse=yes
+  tags: mysql
+
+- name: register status of slow.log
+  stat: path=/var/log/mysql/slow.log
+  register: f
+  tags: mysql
+
+- name: create slow.log
+  file:
+    path=/var/log/mysql/slow.log
+    state=touch
+    owner=mysql
+    group=mysql
+    mode=0644
+  when: not f.stat.exists
+  tags: mysql
+
+- name: start mysqld and enabled at boot
+  service:
+    name=mysqld
+    state=started
+    enabled=yes
+  tags: mysql
+
+# if .my.cnf already exists, this will cause an mysql-root-password update
+- name: update root password
+  mysql_user:
+    name=root
+    host={{ item }}
+    password="{{ mysql.root_password}}"
+    login_user=root
+    check_implicit_admin=yes
+  with_items:
+    - "{{ ansible_hostname }}"
+    - 127.0.0.1
+    - ::1
+    - localhost
+  tags: mysql
+
+- name: copy .my.cnf for root
+  template:
+    src=my.cnf.root.j2
+    dest=/root/.my.cnf
+    owner=root
+    group=root
+    mode=0600
+  tags: mysql
+
+- name: copy .my.cnf for user
+  template:
+    src=my.cnf.user.j2
+    dest=/home/karasawa/.my.cnf
+    owner=karasawa
+    group=karasawa
+    mode=0600
+  tags: mysql
+
+- name: remove anonymous user
+  mysql_user:
+    name=""
+    host={{ item }}
+    state="absent"
+    login_user=root
+    login_password={{ mysql.root_password }}
+  with_items:
+    - "{{ ansible_hostname }}"
+    - localhost
+  tags: mysql
+
+- name: remove test database
+  mysql_db:
+    name=test
+    state=absent
+    login_user=root
+    login_password={{ mysql.root_password }}
+  tags: mysql
+
+- name: create database
+  mysql_db:
+    name={{ item.name }}
+    state=present
+    login_user=root
+    login_password={{ mysql.root_password }}
+  with_items:
+    - "{{ mysql_databases }}"
+  tags: mysql
+
+- name: create work user
+  mysql_user:
+    name={{ mysql.user }}
+    password={{ mysql.password }}
+    host=localhost
+    append_privs=true
+    priv={{ item.priv }}
+    state=present
+    login_user=root
+    login_password={{ mysql.root_password }}
+  with_items:
+    - "{{ mysql_databases }}"
+  tags: mysql

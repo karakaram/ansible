@@ -1,0 +1,3 @@
+os:
+  version: "7"
+  timezone: "Asia/Tokyo"

@@ -1,0 +1,38 @@
+---
+- name: install epel release package
+  yum:
+    name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ os.version }}.noarch.rpm
+    state: present
+  tags: fabric
+
+- name: install IUS release package
+  yum:
+    name: https://centos{{ os.version }}.iuscommunity.org/ius-release.rpm
+    state: present
+  tags: fabric
+
+- name: disable epel and rpmforge and remi repository
+  replace:
+    dest=/etc/yum.repos.d/ius.repo
+    regexp="enabled=1"
+    replace="enabled=0"
+  tags: fabric
+
+- name: install python2.7
+  yum:
+    name={{ item }}
+    state=present
+    enablerepo=epel,ius
+  with_items:
+    - python27
+    - python27-devel
+    - python27-pip
+    - python27-setuptools
+  tags: fabric
+
+- name: install fabric with pip
+  pip: 
+    name=fabric
+    executable=pip2.7
+    state=present
+  tags: fabric

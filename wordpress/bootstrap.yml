@@ -1,0 +1,8 @@
+---
+- hosts: wordpress
+  user: root
+  become: yes
+  gather_facts: no
+  roles:
+    - bootstrap
+    - ../common-roles/common/chrony

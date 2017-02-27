@@ -1,0 +1,23 @@
+env: "vagrant"
+
+user:
+  name: "vagrant"
+  password: "{{ 'vagrant'|password_hash('sha512') }}"
+  group: "vagrant,wheel"
+
+ssh:
+  port: "22"
+  hosts_allow: "all"
+
+mysql:
+  root_password: "vagrant"
+  user: "vagrant"
+  password: "vagrant"
+
+mysql_databases:
+  - { name: "wordpress", priv: "wordpress.*:ALL" }
+  - { name: "cashbook", priv: "cashbook.*:ALL" }
+
+wordpress:
+  host: localhost
+  host_without_www: host

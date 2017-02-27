@@ -1,0 +1,9 @@
+---
+- hosts: kibana
+  user: "{{ user.name }}"
+  become: yes
+  roles:
+    - ../common-roles/common/selinux
+    - ../common-roles/common/timezone
+    - ../common-roles/common/chrony
+    - ../common-roles/kibana

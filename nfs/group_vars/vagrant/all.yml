@@ -1,0 +1,12 @@
+env: "vagrant"
+
+user:
+  name: "vagrant"
+
+nfs:
+  cidr: "192.168.33.0/24"
+  server_host: "192.168.33.11"
+  server_directory: "/var/exports/share"
+  client_directory: "/mnt/nfs/share"
+
+

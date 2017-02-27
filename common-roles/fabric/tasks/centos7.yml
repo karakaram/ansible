@@ -1,0 +1,22 @@
+---
+- name: install requirement packages
+  yum:
+    name={{ item }}
+    state=present
+  with_items:
+    - gcc
+    - python-devel
+    - epel-release
+  tags: fabric
+
+- name: install python-pip
+  yum:
+    name=python-pip
+    state=present
+  tags: fabric
+
+- name: install fabric by pip
+  pip: 
+    name=fabric
+    state=present
+  tags: fabric

@@ -1,0 +1,80 @@
+---
+- name: clone dotfiles
+  git:
+    repo=git@github.com:karakaram/dotfiles.git
+    dest=~/var/lib/dotfiles
+
+- name: link .vimrc
+  file:
+    src=~/var/lib/dotfiles/.vimrc
+    dest=~/.vimrc
+    state=link
+
+- name: link .vimrc.local
+  copy:
+    src=~/var/lib/dotfiles/.vimrc.local.dist
+    dest=~/.vimrc.local
+    force=no
+
+- name: link .gvimrc
+  file:
+    src=~/var/lib/dotfiles/.gvimrc
+    dest=~/.gvimrc
+    state=link
+
+- name: link .ideavimrc
+  file:
+    src=~/var/lib/dotfiles/.ideavimrc
+    dest=~/.ideavimrc
+    state=link
+
+- name: link .vim
+  file:
+    src=~/var/lib/dotfiles/.vim
+    dest=~/.vim
+    state=link
+
+- name: link .gitignore
+  file:
+    src=~/var/lib/dotfiles/.gitignore_global
+    dest=~/.gitignore
+    state=link
+
+- name: link .gitconfig
+  file:
+    src=~/var/lib/dotfiles/.gitconfig
+    dest=~/.gitconfig
+    state=link
+
+- name: link .gitconfig.local
+  copy:
+    src=~/var/lib/dotfiles/.gitconfig.local.dist
+    dest=~/.gitconfig.local
+    force=no
+
+- name: is exists .zshrc-mac.local
+  stat: path=~/icloud/conf/dotfiles/.zshrc-mac.local
+  register: f
+
+- name: link .zshrc-mac.local
+  file:
+    src=~/icloud/conf/dotfiles/.zshrc-mac.local
+    dest=~/.zshrc.local
+    state=link
+  when: f.stat.exists
+
+- name: is exists .ansible_vault_password
+  stat: path=~/icloud/conf/dotfiles/.ansible_vault_password
+  register: f
+
+- name: link .ansible.cfg
+  file:
+    src=~/icloud/conf/dotfiles/.ansible.cfg
+    dest=~/.ansible.cfg
+    state=link
+
+- name: link .ansible_vault_password
+  file:
+    src=~/icloud/conf/dotfiles/.ansible_vault_password
+    dest=~/.ansible_vault_password
+    state=link

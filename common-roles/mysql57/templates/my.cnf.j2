@@ -1,0 +1,84 @@
+[mysql]
+show-warnings
+prompt='[\d] mysql> '
+
+[mysqld]
+# basic
+datadir=/var/lib/mysql
+socket=/var/lib/mysql/mysql.sock
+symbolic-links=0
+log-error=/var/log/mysqld.log
+pid-file=/var/run/mysqld/mysqld.pid
+character-set-server=utf8
+#sql_mode=NO_ENGINE_SUBSTITUTION
+explicit_defaults_for_timestamp=1
+default_password_lifetime=0
+#secure-file-priv=/tmp
+log-timestamps=system
+skip-name-resolve
+
+# max connections
+max_connections=32
+thread_cache_size=8
+# max_connections * tables used in one transaction + 5
+table_open_cache=256
+# 400 + (table_open_cache / 2)
+table_definition_cache=512
+# table_open_cache * 2
+open_files_limit=512
+
+# global buffer
+key_buffer_size=32M
+tmp_table_size=2M
+max_heap_table_size=2M
+query_cache_size=32M
+query_cache_limit=2M
+#query_cache_min_res_unit=4k
+query_cache_type=1
+
+# thread buffer
+read_buffer_size=256K
+read_rnd_buffer_size=512K
+join_buffer_size=256K
+sort_buffer_size=512K
+
+# InnoDB
+innodb_buffer_pool_size=32M
+innodb_sort_buffer_size=1M
+innodb_log_buffer_size=8M
+innodb_file_per_table
+innodb_autoextend_increment=64
+innodb_log_files_in_group=2
+innodb_log_file_size=8M
+innodb_flush_log_at_trx_commit=1
+innodb_flush_method=O_DIRECT
+innodb_flush_neighbors=0
+innodb_thread_concurrency=2
+innodb_commit_concurrency=2
+
+# binlog
+#log-bin=mysql-bin
+#binlog_format=MIXED
+#max_binlog_size=128M
+#expire_logs_days=1
+#server-id=1
+
+# log
+general_log=0
+general_log_file=/var/log/mysql/general.log
+slow_query_log=1
+slow_query_log_file=/var/log/mysql/slow.log
+long_query_time=2
+log_queries_not_using_indexes=1
+
+[myisamchk]
+key_buffer=32M
+sort_buffer=32M
+read_buffer=16M
+write_buffer=16M
+
+[mysqldump]
+default-character-set=utf8
+quick
+set-charset
+single-transaction

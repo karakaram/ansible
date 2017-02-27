@@ -1,0 +1,24 @@
+server {
+    listen 80 default_server;
+    server_name v133-130-119-222.a04a.g.tyo1.static.cnode.io;
+    root /var/www/cashbook/current/web;
+    charset utf-8;
+
+    location / {
+        auth_basic "Restricted";
+        auth_basic_user_file /var/www/.htpasswd;
+
+        # try to serve file directly, fallback to app.php
+        try_files $uri /app.php$is_args$args;
+    }
+
+    location ~ ^/app\.php(/|$) {
+        expires        off;
+        fastcgi_pass   phpfpm;
+        fastcgi_split_path_info ^(.+\.php)(/.*)$;
+        include fastcgi_params;
+        fastcgi_param  SCRIPT_FILENAME  $realpath_root$fastcgi_script_name;
+        fastcgi_param DOCUMENT_ROOT $realpath_root;
+        internal;
+    }
+}

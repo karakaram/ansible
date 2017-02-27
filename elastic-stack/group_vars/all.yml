@@ -1,0 +1,9 @@
+os:
+  version: "7"
+  timezone: "Asia/Tokyo"
+
+user:
+  name: "vagrant"
+
+nginx:
+  port: 8080

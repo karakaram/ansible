@@ -1,0 +1,23 @@
+---
+- name: copy iptables
+  template:
+    src=iptables.j2
+    dest=/etc/sysconfig/iptables
+    backup=yes
+  when: os.version = "6"
+
+- name: enable iptables
+  service:
+    name=iptables
+    enabled=yes
+  when: os.version = "6"
+
+- name: disable ipv6
+  blockinfile:
+    dest: /etc/sysctl.conf
+    insertafter: '^kernel.shmall = '
+    content: |
+      # Disable ipv6
+      net.ipv6.conf.all.disable_ipv6 = 1
+      net.ipv6.conf.default.disable_ipv6 = 1
+  when: os.version = "6"

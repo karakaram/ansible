@@ -1,0 +1,72 @@
+---
+- name: increase max of file descriptors
+  blockinfile:
+    dest: /etc/security/limits.conf
+    block: |
+      root soft nofile 65536
+      root hard nofile 65536
+      * soft nofile 65536
+      * hard nofile 65536
+  register: result
+  tags:
+    - fluentd
+    - fluentd-install
+
+- name: apply file descriptors
+  command: sysctl -p
+  when: result.changed == true
+
+- name: optimize network kernel parameters
+  blockinfile:
+    dest: /etc/sysctl.conf
+    block: |
+      net.ipv4.tcp_tw_recycle = 1
+      net.ipv4.tcp_tw_reuse = 1
+      net.ipv4.ip_local_port_range = 10240    65535
+  tags:
+    - fluentd
+    - fluentd-install
+
+- name: add GPG key
+  rpm_key:
+    state=present
+    key=https://packages.treasuredata.com/GPG-KEY-td-agent
+  tags:
+    - fluentd
+    - install
+
+- name: add treasure data repository to yum
+  template:
+    src=td.repo.j2
+    dest=/etc/yum.repos.d/td.repo
+  tags:
+    - fluentd
+    - install
+
+- name: install toolbelt
+  yum:
+    name=td-agent
+    state=present
+  tags:
+    - fluentd
+    - install
+
+- name: empty td-agent.conf
+  command: cp /dev/null /etc/td-agent/td-agent.conf
+
+#- name: copy td-agent.conf
+#  template:
+#    src=td-agent.conf.j2
+#    dest=/etc/td-agent/td-agent.conf
+#  notify: restart fluentd
+#  tags:
+#    - fluentd
+#    - install
+
+- name: start fluentd and enabled on boot
+  service:
+    name=td-agent
+    enabled=true
+  tags:
+    - fluentd
+    - install

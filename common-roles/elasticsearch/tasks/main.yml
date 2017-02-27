@@ -1,0 +1,64 @@
+---
+- name: add GPG key
+  rpm_key:
+    state: present
+    key: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+  tags:
+    - elasticsearch
+
+- name: copy elastic.repo to /etc/yum.repos.d
+  template:
+    src: elasticsearch.repo.j2
+    dest: /etc/yum.repos.d/elasticsearch.repo
+  tags:
+    - kibana
+
+- name: install elasticsearch
+  yum:
+    name: elasticsearch
+    state: present
+  tags:
+    - elasticsearch
+
+- name: set network.host to elasticsearch.yml
+  lineinfile:
+    dest: /etc/elasticsearch/elasticsearch.yml
+    regexp: "^#?\\s?network.host:"
+    line: "network.host: _local_, _site_"
+  notify: restart elasticsearch
+  tags:
+    - elasticsearch
+
+- name: set -Xms to jvm.options
+  lineinfile:
+    dest: /etc/elasticsearch/jvm.options
+    regexp: "^-Xms"
+    line: "-Xms1g"
+  notify: restart elasticsearch
+  tags:
+    - elasticsearch
+
+- name: set -Xmx to jvm.options
+  lineinfile:
+    dest: /etc/elasticsearch/jvm.options
+    regexp: "^-Xmx"
+    line: "-Xmx1g"
+  notify: restart elasticsearch
+  tags:
+    - elasticsearch
+
+#- name: set indices.fielddata.cache.size to elasticsearch.yml
+#  lineinfile:
+#    dest: /etc/elasticsearch/elasticsearch.yml
+#    regexp: "^#?\\s?indices.fielddata.cache.size:"
+#    line: "indices.fielddata.cache.size: 20%"
+#  notify: restart elasticsearch
+#  tags:
+#    - elasticsearch
+
+- name: start elasticsearch and enabled on boot
+  service:
+    name: elasticsearch
+    enabled: true
+  tags:
+    - elasticsearch

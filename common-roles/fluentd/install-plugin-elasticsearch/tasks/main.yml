@@ -1,0 +1,12 @@
+---
+- name: install fluentd-plugins
+  gem:
+    name={{ item }}
+    state=latest
+    executable="/opt/td-agent/embedded/bin/fluent-gem"
+    user_install=false
+  with_items:
+    - fluent-plugin-elasticsearch
+  notify: restart fluentd
+  tags:
+    - fluentd

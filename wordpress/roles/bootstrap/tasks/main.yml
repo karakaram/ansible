@@ -1,0 +1,27 @@
+---
+- name: update yum
+  yum:
+    name=*
+    state=latest
+  when: env != "vagrant"
+  tags:
+    - yum
+
+- include: user.yml
+  when: env != "vagrant"
+
+- include: ssh.yml
+  when: env != "vagrant"
+
+- include: centos6.yml
+  when: os.version == "6"
+
+- include: centos7.yml
+  when: os.version == "7"
+
+- name: restart machine
+  shell: sleep 2 && shutdown -r now "Ansible updates triggered"
+  async: 1
+  poll: 0
+  become: true
+  ignore_errors: true

@@ -1,0 +1,6 @@
+---
+- include: centos6.yml
+  when: os.version == "6"
+
+- include: centos7.yml
+  when: os.version == "7"

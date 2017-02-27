@@ -1,0 +1,48 @@
+---
+- name: install nfs-utils
+  yum:
+    name=nfs-utils
+    state=present
+  tags: nfs-server
+
+- name: start nfs-server
+  service:
+    name=nfs
+    state=started
+    enabled=yes
+  tags: nfs-server
+  when: os.version == "6"
+
+- name: start nfs-server
+  service:
+    name=nfs-server
+    state=started
+    enabled=yes
+  tags: nfs-server
+  when: os.version == "7"
+
+- name: create nfs-directory
+  file: path={{ nfs.server_directory }}
+        recurse=yes
+        state=directory
+        owner=nfsnobody
+        group=nfsnobody
+  tags: nfs-server
+
+- name: change /etc/exports
+  blockinfile:
+    dest: /etc/exports
+    block: |
+      {{ nfs.server_directory }} {{ nfs.cidr }}(rw,all_squash)
+  notify: reload exports
+  tags: nfs-server
+
+- name: updating firewall rules
+  firewalld:
+    service={{ item }}
+    permanent=true
+    state=enabled
+  with_items:
+    - nfs
+  notify: restart firewalld
+  tags: nfs-server

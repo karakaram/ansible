@@ -1,0 +1,16 @@
+---
+- hosts: wordpress
+  user: "{{ user.name }}"
+  become: yes
+  gather_facts: yes
+  roles:
+    - tcp_wrapper
+    - ../common-roles/common/selinux
+    - ../common-roles/common/lastlog
+    - ../common-roles/common/timezone
+    - ../common-roles/common/vim
+    - ../common-roles/mysql57
+    - ../common-roles/nginx/install
+    - ../common-roles/nginx/wordpress
+    - ../common-roles/php
+    - cron

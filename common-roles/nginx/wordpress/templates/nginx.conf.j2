@@ -1,0 +1,111 @@
+user nginx;
+
+worker_processes auto;
+worker_rlimit_nofile  4096;
+
+error_log /var/log/nginx/error.log warn;
+pid       /var/run/nginx.pid;
+
+events {
+    worker_connections 1024;
+    multi_accept on;
+    use epoll;
+    accept_mutex_delay 100ms;
+}
+
+http {
+    include         /etc/nginx/mime.types;
+    default_type    application/octet-stream;
+    charset UTF-8;
+    server_names_hash_bucket_size 128;
+
+    log_format main     '$remote_addr - $remote_user [$time_local] "$request" '
+                        '$status $body_bytes_sent "$http_referer" '
+                        '$upstream_cache_status '
+                        '"$http_user_agent" "$http_x_forwarded_for"';
+    log_format backend  '$http_x_forwarded_for - $remote_user [$time_local] "$request" '
+                        '$status $body_bytes_sent "$http_referer" '
+                        '"$http_user_agent"';
+
+    access_log  /var/log/nginx/access.log  main;
+
+    server_name_in_redirect off;
+    port_in_redirect    off;
+    server_tokens       off;
+
+    sendfile            on;
+    tcp_nopush          on;
+    tcp_nodelay         on;
+
+    keepalive_timeout   5;
+
+    client_max_body_size    4m;
+    client_body_buffer_size 256k;
+
+    if_modified_since before;
+
+    gzip              on;
+    gzip_http_version 1.0;
+    gzip_proxied      any;
+    gzip_min_length   1024;
+    gzip_vary         on;
+    gzip_comp_level   6;
+    gzip_types        text/plain
+                      text/xml
+                      text/css
+                      text/json
+                      text/javascript+json
+                      application/javascript
+                      application/atom+xml
+                      application/xml+rss
+                      application/json;
+    gzip_disable      "MSIE [1-6].";
+
+    open_file_cache          max=100 inactive=20s;
+    open_file_cache_valid    30s;
+    open_file_cache_min_uses 2;
+    open_file_cache_errors   on;
+
+    proxy_cache_path    /var/cache/nginx/proxy_cache levels=1:2
+                        keys_zone=wpcache:32m max_size=256m inactive=360m;
+    proxy_temp_path     /var/cache/nginx/proxy_temp;
+    proxy_cache_key     "$scheme://$host$request_uri";
+
+    proxy_set_header    Host               $host;
+    proxy_set_header    X-Real-IP          $remote_addr;
+    proxy_set_header    X-Remote-Addr      $remote_addr;
+    proxy_set_header    X-Forwarded-Proto  https;
+    proxy_set_header    X-Forwarded-Host   $host;
+    proxy_set_header    X-Forwarded-Server $host;
+    proxy_set_header    X-Forwarded-For    $proxy_add_x_forwarded_for;
+    proxy_hide_header   X-Pingback;
+    proxy_hide_header   X-Powered-By;
+    proxy_hide_header   Etag;
+    proxy_hide_header   Vary;
+
+    proxy_connect_timeout 5;
+    proxy_send_timeout  10;
+    proxy_read_timeout  90;
+
+    proxy_cache_use_stale timeout invalid_header http_500 http_502 http_503 http_504;
+    proxy_cache_lock    on;
+    proxy_cache_lock_timeout 5s;
+    proxy_buffering     on;
+    proxy_buffers       8 32k;
+    proxy_buffer_size   64k;
+
+    upstream backend {
+        server unix:/var/run/nginx-backend.sock;
+    }
+
+    upstream phpfpm {
+        server unix:/var/run/php-fpm.sock;
+    }
+
+
+    # Load modular configuration files from the /etc/nginx/conf.d directory.
+    # See http://nginx.org/en/docs/ngx_core_module.html#include
+    # for more information.
+    include /etc/nginx/conf.d/*.conf;
+
+}

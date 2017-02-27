@@ -1,0 +1,15 @@
+---
+- name: set td-agent.conf
+  blockinfile:
+    dest: /etc/td-agent/td-agent.conf
+    block: |
+      <source>
+        @type forward
+        port 24224
+        tag *
+      </source>
+    marker: "# {mark} SOURCE FORWARD PORT ANSIBLE MANAGED BLOCK"
+  notify: restart fluentd
+  tags:
+    - fluentd
+    - fluentd-server-source

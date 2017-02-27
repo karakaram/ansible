@@ -1,0 +1,5 @@
+[rundeck]
+192.168.33.11
+
+[vagrant:children]
+rundeck

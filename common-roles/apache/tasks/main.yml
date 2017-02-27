@@ -1,0 +1,30 @@
+---
+- name: install apache
+  yum:
+    name={{ item }}
+    state=present
+  with_items:
+    - httpd
+  tags:
+    - apache
+    - apache-install
+
+- name: change permission for log directory
+  file:
+    path=/var/log/httpd
+    state=directory
+    mode=0755
+    owner=apache
+    group=apache
+  tags:
+    - apache
+    - apache-log-permisiion
+
+- name: start httpd and enabled at boot
+  service:
+    name=httpd
+    state=started
+    enabled=yes
+  tags:
+    - apache
+    - apache-start

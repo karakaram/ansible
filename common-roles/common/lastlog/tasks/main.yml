@@ -1,0 +1,19 @@
+---
+- name: register status of lastlog
+  stat: path=/var/log/lastlog
+  register: f
+  tags:
+    - common
+    - lastlog
+
+- name: create lastlog
+  file:
+    path=/var/log/lastlog
+    state=touch
+    owner=root
+    group=root
+    mode=0644
+  when: not f.stat.exists
+  tags:
+    - common
+    - lastlog
