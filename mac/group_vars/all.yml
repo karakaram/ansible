@@ -9,6 +9,7 @@ homebrew_packages:
   - { name: ansible }
   - { name: autoconf }
   - { name: automake }
+  - { name: awscli }
   - { name: cask }
   - { name: curl }
   - { name: curl, state: linked, install_options: force }
