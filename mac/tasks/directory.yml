@@ -7,7 +7,8 @@
     - ~/bin
     - ~/var/lib
     - ~/var/www
-    - ~/var/vagrant
+    - ~/var/proj
+    - ~/var/tmp
 
 - name: create symlink for icloud
   file:
