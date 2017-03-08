@@ -78,3 +78,19 @@
     src=~/icloud/conf/dotfiles/.ansible_vault_password
     dest=~/.ansible_vault_password
     state=link
+
+- name: link .awscli/config
+  file:
+    src=~/icloud/conf/aws/config
+    dest=~/.aws/config
+    state=link
+    mode=600
+  tags: aws
+
+- name: link .awscli/credentials
+  file:
+    src=~/icloud/conf/aws/credentials
+    dest=~/.aws/credentials
+    state=link
+    mode=600
+  tags: aws
