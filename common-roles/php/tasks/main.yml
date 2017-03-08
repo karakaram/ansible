@@ -196,14 +196,6 @@
   notify: restart php-fpm
   tags: php
 
-- name: set catch_workers_outcopy in php-fpm.d/www.conf
-  lineinfile:
-    dest=/etc/php-fpm.d/www.conf
-    regexp="^;?catch_workers_outcopy ="
-    line="catch_workers_outcopy = yes"
-  notify: restart php-fpm
-  tags: php
-
 - name: change session.save_path
   lineinfile:
     dest=/etc/php-fpm.d/www.conf
