@@ -1,27 +1,30 @@
 ---
 - name: update homebrew
-  homebrew: update_homebrew=yes
+  homebrew:
+    update_homebrew: yes
 
 - name: add homebrew tap repository
-  homebrew_tap: tap={{ item }} state=present
+  homebrew_tap:
+    tap: "{{ item }}"
+    state: present
   with_items: "{{ homebrew_taps }}"
 
 - name: install homebrew package
   homebrew:
-    name={{ item.name }}
-    state={{ item.state | default('latest') }}
-    install_options={{
+    name: "{{ item.name }}"
+    state: "{{ item.state | default('latest') }}"
+    install_options: "{{
       item.install_options | default() | join(',')
       if item.install_options is not string
       else item.install_options
-    }}
+    }}"
   with_items: "{{ homebrew_packages }}"
 #  register: brew_result
 
 #- name: create directory for brew info
 #  file:
-#    path=brew_info
-#    state=directory
+#    path:brew_info
+#    state:directory
 
 #- name: Save brew info
 #  shell: brew info {{ item }} > brew_info/{{ item }}
@@ -29,16 +32,16 @@
 
 - name: install homebrew-cask package
   homebrew_cask:
-    name={{ item.name }}
-    state={{ item.state|default('installed') }}
+    name: "{{ item.name }}"
+    state: "{{ item.state|default('installed') }}"
   with_items: "{{ homebrew_cask_packages }}"
 #  register: cask_result
 
 #- name: create directory for homebrew-cask info
 #  file:
-#    path=cask_info
-#    state=directory
+#    path:cask_info
+#    state:directory
 
 #- name: Save homebrew-cask info
-#  shell: brew cask info {{ item }} > cask_info/{{ item }}
+#  shell: brew cask info "{{ item }} > cask_info/{{ item }}"
 #  with_items: "{{ cask_result.results | selectattr('changed') | map(attribute='item') | map(attribute='name') | list }}"

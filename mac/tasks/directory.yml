@@ -1,8 +1,8 @@
 ---
 - name: create directory
   file:
-    path={{ item }}
-    state=directory
+    path: "{{ item }}"
+    state: directory
   with_items:
     - ~/bin
     - ~/var/lib
@@ -12,6 +12,6 @@
 
 - name: create symlink for icloud
   file:
-    src="~/Library/Mobile Documents/com~apple~CloudDocs"
-    dest=~/icloud
-    state=link
+    src: "~/Library/Mobile Documents/com~apple~CloudDocs"
+    dest: ~/icloud
+    state: link
