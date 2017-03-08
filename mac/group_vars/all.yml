@@ -23,6 +23,7 @@ homebrew_packages:
   - { name: git }
   - { name: gdbm }
   - { name: gmp }
+  - { name: graphviz }
   - { name: libevent }
   - { name: libtool }
   - { name: libxml2 }
