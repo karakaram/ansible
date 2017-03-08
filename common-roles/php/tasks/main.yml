@@ -7,7 +7,7 @@
   yum:
     name={{ item }}
     state=present
-    enablerepo=remi,remi-php70
+    enablerepo=remi,remi-php71
   with_items:
       - php
       - php-fpm
