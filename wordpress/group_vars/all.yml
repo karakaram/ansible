@@ -8,3 +8,4 @@ php:
 
 nginx:
   fastcgi_read_timeout: "240"
+  port: 80
