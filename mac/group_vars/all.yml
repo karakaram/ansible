@@ -20,6 +20,7 @@ homebrew_packages:
   - { name: icu4c, state: linked, install_options: force }
   - { name: intltool }
   - { name: jpeg }
+  - { name: jq }
   - { name: git }
   - { name: gdbm }
   - { name: gmp }
