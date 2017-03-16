@@ -1,16 +1,16 @@
 ---
 - name: copy nginx.repo to /etc/yum.repos.d
   template:
-    src=nginx.repo.j2
-    dest=/etc/yum.repos.d/nginx.repo
+    src: nginx.repo.j2
+    dest: /etc/yum.repos.d/nginx.repo
   tags:
     - nginx
     - nginx-install
 
 - name: install nginx
   yum:
-    name={{ item }}
-    state=present
+    name: "{{ item }}"
+    state: present
   with_items:
     - nginx
     - httpd-tools
@@ -20,18 +20,18 @@
 
 - name: change default port
   replace:
-    dest=/etc/nginx/conf.d/default.conf
-    regexp="^(\s+)listen\s+\d+;"
-    replace="\1listen {{ nginx.port }};"
+    dest: /etc/nginx/conf.d/default.conf
+    regexp: "^(\\s+)listen\\s+\\d+;"
+    replace: "\\1listen {{ nginx.port }};"
   tags:
     - nginx
     - nginx-change-port
 
 - name: change boot script
   replace:
-    dest=/usr/lib/systemd/system/nginx.service
-    regexp="^ExecStop=/bin/kill -s QUIT \$MAINPID"
-    replace="ExecStop=/bin/kill -s TERM $MAINPID"
+    dest: /usr/lib/systemd/system/nginx.service
+    regexp: "^ExecStop=/bin/kill -s QUIT \\$MAINPID"
+    replace: "ExecStop=/bin/kill -s TERM $MAINPID"
   when: os.version == "7"
   tags:
     - nginx
@@ -50,29 +50,29 @@
 
 - name: change create in logrotate
   lineinfile:
-    dest=/etc/logrotate.d/nginx
-    regexp="^(\s*)create"
-    line="\1create 644 nginx {{ user.name }}"
-    backrefs=yes
+    dest: /etc/logrotate.d/nginx
+    regexp: "^(\\s*)create"
+    line: "\\1create 644 nginx {{ user.name }}"
+    backrefs: yes
   tags:
     - nginx
     - nginx-install
 
 - name: change rotate in logrotate
   lineinfile:
-    dest=/etc/logrotate.d/nginx
-    regexp="^(\s*)rotate"
-    line="\1rotate 7"
-    backrefs=yes
+    dest: /etc/logrotate.d/nginx
+    regexp: "^(\\s*)rotate"
+    line: "\\1rotate 7"
+    backrefs: yes
   tags:
     - nginx
     - nginx-install
 
 - name: start nginx and enabled at boot
   service:
-    name=nginx
-    state=started
-    enabled=yes
+    name: nginx
+    state: started
+    enabled: yes
   tags:
     - nginx
     - nginx-install
