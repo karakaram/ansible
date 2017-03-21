@@ -49,6 +49,12 @@
     dest: ~/.vim/bundle/neobundle.vim
     update: no
 
+# nvm
+- name: create nvm directory
+  file:
+    path: ~/.nvm
+    state: directory
+
 # phpbrew
 - name: download phpbrew
   get_url:
