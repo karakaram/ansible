@@ -1,6 +1,6 @@
 - name: install mysql-community repository
   yum:
-    name: "http://dev.mysql.com/get/mysql57-community-release-el{{ os.version }}-8.noarch.rpm"
+    name: "http://dev.mysql.com/get/mysql57-community-release-el{{ os.version }}-9.noarch.rpm"
   tags:
     - mysql
 
