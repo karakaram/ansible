@@ -34,6 +34,7 @@ homebrew_packages:
   - { name: mysql }
   - { name: nginx }
   - { name: nkf }
+  - { name: nvm }
   - { name: openssl }
   - { name: openssl, state: linked, install_options: force }
   - { name: pcre }
