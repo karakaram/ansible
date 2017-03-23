@@ -25,7 +25,7 @@
   tags:
     - mysql
 
-- name: copy my.cnf
+- name: copy my.cnf for global
   template:
     src: my.cnf.j2
     dest: /etc/my.cnf
@@ -114,6 +114,20 @@
 - name: set mysql root password
   shell: "mysql --connect-expired-password -uroot -p{{ mysql_default_root_password.stdout }} -e \"ALTER USER root@'localhost' IDENTIFIED BY '{{ mysql.root_password }}'\""
   when: login_result_with_default_root_password.stderr.find('Access denied') == -1
+  tags:
+    - mysql
+
+- name: copy my.cnf for root user
+  template:
+    src: root-my.cnf.j2
+    dest: /root/.my.cnf
+  tags:
+    - mysql
+
+- name: copy my.cnf for work user
+  template:
+    src: user-my.cnf.j2
+    dest: /home/{{ user.name }}/.my.cnf
   tags:
     - mysql
 
