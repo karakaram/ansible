@@ -84,7 +84,7 @@
     - mysql
 
 - name: check login for mysql with default root password
-  shell: "mysqladmin ping -uroot -p{{ mysql_default_root_password.stdout }}"
+  shell: "mysqladmin ping -uroot -p\"{{ mysql_default_root_password.stdout }}\""
   register: login_result_with_default_root_password
   failed_when: False
   changed_when: False
@@ -100,7 +100,7 @@
     - debug
 
 - name: set validate_password_policy to LOW
-  shell: "mysql --connect-expired-password -uroot -p{{ mysql_default_root_password.stdout }} -e '{{ item }}'"
+  shell: "mysql --connect-expired-password -uroot -p\"{{ mysql_default_root_password.stdout }}\" -e '{{ item }}'"
   with_items:
     - "SET GLOBAL validate_password_length = 6"
     - "SET GLOBAL validate_password_mixed_case_count = 0"
@@ -112,7 +112,7 @@
     - mysql
 
 - name: set mysql root password
-  shell: "mysql --connect-expired-password -uroot -p{{ mysql_default_root_password.stdout }} -e \"ALTER USER root@'localhost' IDENTIFIED BY '{{ mysql.root_password }}'\""
+  shell: "mysql --connect-expired-password -uroot -p\"{{ mysql_default_root_password.stdout }}\" -e \"ALTER USER root@'localhost' IDENTIFIED BY '{{ mysql.root_password }}'\""
   when: login_result_with_default_root_password.stderr.find('Access denied') == -1
   tags:
     - mysql
