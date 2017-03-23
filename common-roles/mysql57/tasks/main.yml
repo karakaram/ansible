@@ -137,7 +137,6 @@
     host: "{{ item }}"
     state: "absent"
     login_user: root
-    login_password: "{{ mysql.root_password }}"
   with_items:
     - localhost
   tags:
@@ -148,7 +147,6 @@
     name: test
     state: absent
     login_user: root
-    login_password: "{{ mysql.root_password }}"
   tags:
     - mysql
 
@@ -157,7 +155,6 @@
     name: "{{ item.name }}"
     state: present
     login_user: root
-    login_password: "{{ mysql.root_password }}"
   with_items:
     - "{{ mysql_databases }}"
   tags:
@@ -172,7 +169,6 @@
     priv: "{{ item.priv }}"
     state: present
     login_user: root
-    login_password: "{{ mysql.root_password }}"
   with_items:
     - "{{ mysql_databases }}"
   tags:
