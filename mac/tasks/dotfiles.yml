@@ -52,14 +52,26 @@
     dest: ~/.gitconfig.local
     force: no
 
-- name: is exists .zshrc-mac.local
+- name: is exists .zshrc.mac
   stat:
-    path: ~/icloud/conf/dotfiles/.zshrc-mac.local
+    path: ~/icloud/conf/dotfiles/.zshrc.mac
   register: f
 
-- name: link .zshrc-mac.local
+- name: link .zshrc.mac
   file:
-    src: ~/icloud/conf/dotfiles/.zshrc-mac.local
+    src: ~/icloud/conf/dotfiles/.zshrc.mac
+    dest: ~/.zshrc
+    state: link
+  when: f.stat.exists
+
+- name: is exists .zshrc.local
+  stat:
+    path: ~/icloud/conf/dotfiles/.zshrc.local
+  register: f
+
+- name: link .zshrc.local
+  file:
+    src: ~/icloud/conf/dotfiles/.zshrc.local
     dest: ~/.zshrc.local
     state: link
   when: f.stat.exists
