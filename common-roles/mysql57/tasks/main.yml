@@ -190,3 +190,10 @@
     - "{{ mysql_databases }}"
   tags:
     - mysql
+
+- name: copy logrotate
+  template:
+    src: logrotate-mysql.j2
+    dest: /etc/logrotate.d/mysql
+  tags:
+    - mysql
