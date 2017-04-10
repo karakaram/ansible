@@ -1,5 +1,5 @@
 ---
-- include: ../common-roles/common/firewalld/main.yml
+- include: ../common-roles/common/firewalld/tasks/main.yml
 
 - name: updating firewall rules
   firewalld:
