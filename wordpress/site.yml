@@ -5,6 +5,7 @@
   gather_facts: yes
   roles:
     - tcp_wrapper
+    - ../common-roles/common/chrony
     - ../common-roles/common/selinux
     - ../common-roles/common/lastlog
     - ../common-roles/common/timezone
