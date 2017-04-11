@@ -15,3 +15,4 @@
     - ../common-roles/nginx/wordpress
     - ../common-roles/php
     - cron
+    - ../common-roles/common/reboot
