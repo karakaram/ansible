@@ -73,6 +73,7 @@ homebrew_cask_packages:
   - { name: shiftit }
   - { name: skitch }
   - { name: skype }
+  - { name: slack }
   - { name: the-unarchiver }
   - { name: virtualbox }
   - { name: vagrant }
