@@ -98,7 +98,6 @@
     src: ~/icloud/conf/aws/config
     dest: ~/.aws/config
     state: link
-    mode: 600
   tags: aws
 
 - name: link .awscli/credentials
@@ -106,5 +105,4 @@
     src: ~/icloud/conf/aws/credentials
     dest: ~/.aws/credentials
     state: link
-    mode: 600
   tags: aws
