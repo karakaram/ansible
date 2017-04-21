@@ -6,7 +6,6 @@ homebrew_taps:
   - splhack/splhack
   - delphinus/macvim-kaoriya
 homebrew_packages:
-  - { name: ansible }
   - { name: autoconf }
   - { name: automake }
   - { name: awscli }
@@ -38,7 +37,7 @@ homebrew_packages:
   - { name: openssl }
   - { name: openssl, state: linked, install_options: force }
   - { name: pcre }
-  - { name: python }
+  - { name: pyenv }
   - { name: qt5 }
   - { name: rbenv }
   - { name: ruby-build }
