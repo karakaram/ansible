@@ -84,20 +84,6 @@
   command: mv /tmp/composer.phar /usr/local/bin/composer
   when: not f.stat.exists
 
-# Symfony installer
-- name: regist status of symfony installer
-  stat:
-    path: /usr/local/bin/symfony
-  register: f
-
-- name: download symfony installer
-  shell: curl -LsS http://symfony.com/installer -o /usr/local/bin/symfony
-  when: not f.stat.exists
-
-- name: Change permission for symfony installer
-  file:
-    path: /usr/local/bin/symfony mode="a+x"
-
 # Vagrant plugin
 - name: regist list of vagrant plugin
   shell: "vagrant plugin list | awk '{print $1}'"
