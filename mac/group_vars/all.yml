@@ -44,7 +44,6 @@ homebrew_packages:
   - { name: readline }
   - { name: re2c }
   - { name: ssh-copy-id }
-  - { name: terraform }
   - { name: tig }
   - { name: tree }
   - { name: wget }
