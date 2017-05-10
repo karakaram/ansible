@@ -8,7 +8,6 @@ homebrew_taps:
 homebrew_packages:
   - { name: autoconf }
   - { name: automake }
-  - { name: awscli }
   - { name: cask }
   - { name: curl }
   - { name: curl, state: linked, install_options: force }
