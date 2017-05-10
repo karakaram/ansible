@@ -93,6 +93,11 @@
     dest: ~/.ansible_vault_password
     state: link
 
+- name: create directory
+  file:
+    path: ~/.aws
+    state: directory
+
 - name: link .awscli/config
   file:
     src: ~/icloud/conf/aws/config
