@@ -62,7 +62,7 @@ homebrew_cask_packages:
   - { name: karabiner }
   - { name: keyboardcleantool }
   - { name: kindle }
-#  - { name: macvim-kaoriya, install_options: override-system-vim }
+  - { name: macvim-kaoriya, install_options: override-system-vim }
   - { name: macvim-kaoriya }
   - { name: mysqlworkbench }
   - { name: night-owl }
