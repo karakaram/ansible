@@ -16,7 +16,7 @@
     - zlogout
     - zprofile
     - zshenv
-    - zshrc
+#    - zshrc
 
 - name: link .zshrc
   file:
