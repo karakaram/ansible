@@ -4,6 +4,7 @@
     repo: git@github.com:karakaram/dotfiles.git
     dest: ~/var/lib/dotfiles
 
+# vim
 - name: link .vimrc
   file:
     src: ~/var/lib/dotfiles/.vimrc
@@ -34,6 +35,7 @@
     dest: ~/.vim
     state: link
 
+# git
 - name: link .gitignore
   file:
     src: ~/var/lib/dotfiles/.gitignore_global
@@ -52,6 +54,7 @@
     dest: ~/.gitconfig.local
     force: no
 
+# ansible
 - name: is exists .ansible_vault_password
   stat:
     path: ~/icloud/conf/dotfiles/.ansible_vault_password
@@ -69,6 +72,7 @@
     dest: ~/.ansible_vault_password
     state: link
 
+# awscli
 - name: create directory
   file:
     path: ~/.aws
