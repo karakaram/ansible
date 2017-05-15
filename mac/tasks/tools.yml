@@ -18,12 +18,6 @@
     - zshenv
 #    - zshrc
 
-- name: link .zshrc
-  file:
-    src: ~/icloud/conf/dotfiles/.zshrc
-    path: ~/.zshrc
-    state: link
-
 - name: link to preztorc
   file:
     src: ~/icloud/conf/dotfiles/.zpreztorc
