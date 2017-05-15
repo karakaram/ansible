@@ -5,6 +5,6 @@
   become: no
   tasks:
     - include: tasks/directory.yml
-    - include: tasks/homebrew.yml
     - include: tasks/dotfiles.yml
+    - include: tasks/homebrew.yml
     - include: tasks/tools.yml
