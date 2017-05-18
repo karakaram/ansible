@@ -1,4 +1,13 @@
 ---
+# ssh
+- name: link .ssh
+  file:
+    src: ~/icloud/conf/dotfiles/.ssh
+    dest: ~/.ssh
+    mode: 0700
+    state: link
+
+# dotfiles
 - name: clone dotfiles
   git:
     repo: git@github.com:karakaram/dotfiles.git
