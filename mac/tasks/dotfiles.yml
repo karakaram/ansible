@@ -82,21 +82,10 @@
     state: link
 
 # awscli
-- name: create directory
+- name: link .aws
   file:
-    path: ~/.aws
-    state: directory
-
-- name: link .awscli/config
-  file:
-    src: ~/icloud/conf/aws/config
-    dest: ~/.aws/config
+    src: ~/icloud/conf/dotfiles/.aws
+    dest: ~/.aws
+    mode: 0700
     state: link
-  tags: aws
-
-- name: link .awscli/credentials
-  file:
-    src: ~/icloud/conf/aws/credentials
-    dest: ~/.aws/credentials
-    state: link
-  tags: aws
+  tags: debug
