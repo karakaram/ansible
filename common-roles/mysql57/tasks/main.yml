@@ -75,7 +75,6 @@
   changed_when: False
   tags:
     - mysql
-    - debug
 
 - name: debug default_root_password
   debug:
@@ -83,7 +82,6 @@
   when: mysql_default_root_password | success
   tags:
     - mysql
-    - debug
 
 - name: check login for mysql with default root password
   shell: "mysqladmin ping -uroot -p\"{{ mysql_default_root_password.stdout }}\""
@@ -92,14 +90,12 @@
   changed_when: False
   tags:
     - mysql
-    - debug
 
 - name: debug login_result_using_default_root_password
   debug:
     var: login_result_using_default_root_password
   tags:
     - mysql
-    - debug
 
 - name: can login using default root password
   set_fact:
@@ -107,14 +103,12 @@
   when: login_result_using_default_root_password is defined
   tags:
     - mysql
-    - debug
 
 - name: debug login_result_using_default_root_password
   debug:
     var: can_login_using_default_root_password
   tags:
     - mysql
-    - debug
 
 - name: set validate_password_policy to LOW
   shell: "mysql --connect-expired-password -uroot -p\"{{ mysql_default_root_password.stdout }}\" -e '{{ item }}'"
