@@ -68,6 +68,12 @@
     dest: ~/.vim/bundle/neobundle.vim
     update: no
 
+# nodebrew
+- name: create nodebrew directory
+  file:
+    path: ~/.nodebrew/src
+    state: directory
+
 # phpbrew
 - name: download phpbrew
   get_url:

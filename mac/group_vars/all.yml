@@ -30,6 +30,7 @@ homebrew_packages:
   - { name: mhash }
   - { name: mysql }
   - { name: nginx }
+  - { name: nodebrew }
   - { name: nkf }
   - { name: openssl }
   - { name: openssl, state: linked, install_options: force }
