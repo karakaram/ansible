@@ -1,5 +1,11 @@
 server {
     listen 80;
+    server_name {{ postfix.myhostname }};
+    deny all;
+}
+
+server {
+    listen 80;
     server_name {{ wordpress.host_without_www }};
     rewrite ^(.*)$ http://{{ wordpress.host }}$1 last;
 }
