@@ -15,4 +15,5 @@
     - ../common-roles/nginx/wordpress
     - ../common-roles/php
     - cron
+#    - ../common-roles/postfix
     - ../common-roles/common/reboot

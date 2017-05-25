@@ -21,3 +21,7 @@ mysql_databases:
 wordpress:
   host: localhost
   host_without_www: host
+
+postfix:
+  myhostname: "wordpress"
+  mydomain: "wordpress"

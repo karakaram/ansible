@@ -1,0 +1,102 @@
+---
+- name: install postfix
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+      - postfix
+  tags:
+    - postfix
+
+- name: set myhostname in main.cf
+  lineinfile:
+    dest: /etc/postfix/main.cf
+    line: "myhostname = {{ postfix.myhostname }}"
+    insertafter: "#myhostname = virtual.domain.tld"
+  notify: restart postfix
+  tags:
+    - postfix
+
+- name: set mydomain in main.cf
+  lineinfile:
+    dest: /etc/postfix/main.cf
+    line: "mydomain = {{ postfix.mydomain }}"
+    insertafter: "#mydomain = domain.tld"
+  notify: restart postfix
+  tags:
+    - postfix
+
+- name: set myorigin in main.cf
+  lineinfile:
+    dest: /etc/postfix/main.cf
+    regexp: "^#?myorigin ="
+    line: "myorigin = $mydomain"
+  notify: restart postfix
+  tags:
+    - postfix
+
+- name: comment that default inet_interfaces in main.cf
+  lineinfile:
+    dest: /etc/postfix/main.cf
+    regexp: "^#?inet_interfaces = localhost"
+    line: "#inet_interfaces = localhost"
+  notify: restart postfix
+  tags:
+    - postfix
+
+- name: set inet_interfaces to all in main.cf
+  lineinfile:
+    dest: /etc/postfix/main.cf
+    regexp: "^#?inet_interfaces = all"
+    line: "inet_interfaces = all"
+  notify: restart postfix
+  tags:
+    - postfix
+
+- name: set inet_protocols in main.cf
+  lineinfile:
+    dest: /etc/postfix/main.cf
+    regexp: "^#?inet_protocols ="
+    line: "inet_protocols = ipv4"
+  notify: restart postfix
+  tags:
+    - postfix
+
+- name: comment default mydestination in main.cf
+  lineinfile:
+    dest: /etc/postfix/main.cf
+    regexp: "^#?mydestination = \\$myhostname, localhost.\\$mydomain, localhost$"
+    line: "#mydestination = $myhostname, localhost.$mydomain, localhost"
+  notify: restart postfix
+  tags:
+    - postfix
+
+- name: uncomment mydestination in main.cf
+  lineinfile:
+    dest: /etc/postfix/main.cf
+    regexp: "^#?mydestination = \\$myhostname, localhost.\\$mydomain, localhost, \\$mydomain$"
+    line: "mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain"
+  notify: restart postfix
+  tags:
+    - postfix
+
+- name: set smtpd_banner in main.cf
+  lineinfile:
+    dest: /etc/postfix/main.cf
+    line: "smtpd_banner = $myhostname ESMTP unknown"
+    insertafter: "^#smtpd_banner = \\$myhostname ESMTP \\$mail_name \\(\\$mail_version\\)"
+  notify: restart postfix
+  tags:
+    - postfix
+
+- name: updating firewall rules
+  firewalld:
+    service: "{{ item }}"
+    permanent: true
+    state: enabled
+  with_items:
+    - smtp
+  notify: reload firewalld
+  tags:
+    - postfix
+    - debug
