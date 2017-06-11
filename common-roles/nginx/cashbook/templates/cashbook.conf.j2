@@ -1,7 +1,17 @@
 server {
-    listen 80 default_server;
-    server_name v133-130-119-222.a04a.g.tyo1.static.cnode.io;
-    root /var/www/cashbook/current/web;
+    listen 80;
+    server_name {{ cashbook.host }};
+    rewrite ^(.*)$ https://{{ cashbook.host }}$1 last;
+}
+
+server {
+    listen 443;
+    ssl on;
+    server_name {{ cashbook.host }};
+    ssl_certificate /etc/letsencrypt/live/{{ wordpress.host }}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/{{ wordpress.host }}/privkey.pem;
+
+    root /var/www/{{ cashbook.host }}/current/web;
     charset utf-8;
 
     location / {

@@ -22,6 +22,11 @@ wordpress:
   host: localhost
   host_without_www: host
 
+cashbook:
+  host: cashbook.localhost
+  ssl_cert: /etc/pki/tls/certs/server.crt;
+  ssl_key: /etc/pki/tls/private/server.key;
+
 postfix:
   myhostname: "wordpress"
   mydomain: "wordpress"

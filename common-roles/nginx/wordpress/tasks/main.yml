@@ -13,13 +13,6 @@
   notify: restart nginx
   tags: nginx
 
-- name: copy default.conf
-  template:
-    src=default.conf.j2
-    dest=/etc/nginx/conf.d/default.conf
-  notify: restart nginx
-  tags: nginx
-
 - name: create tmp directory
   file:
     path={{ item }}
@@ -32,7 +25,7 @@
     - /var/tmp/nginx
   tags: nginx
 
-- name: create www directory
+- name: create document root directory
   file:
     path={{ item }}
     state=directory
@@ -41,5 +34,4 @@
     group={{ user.name }}
   with_items:
     - /var/www/{{ wordpress.host }}
-    - /var/www/cashbook
   tags: nginx
