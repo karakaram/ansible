@@ -1,0 +1,99 @@
+---
+
+- name: install rbenv dependencies
+  yum:
+    name={{ item }}
+    state=present
+  with_items:
+    - gcc
+    - openssl-devel
+    - libyaml-devel
+    - libffi-devel
+    - readline-devel
+    - zlib-devel
+    - gdbm-devel
+    - ncurses-devel
+    - git
+
+- name: create rbenv group
+  group: name=rbenv
+
+- name: add user to rbenv group
+  user:
+    name="{{ item }}"
+    groups=rbenv
+    append=yes
+  with_items: "{{ rbenv.users }}"
+
+- name: clone rbenv
+  git:
+    repo=https://github.com/sstephenson/rbenv.git
+    dest=/opt/rbenv
+    accept_hostkey=yes
+  register: clone_rbenv_result
+
+- name: clone ruby-build
+  git:
+    repo=https://github.com/sstephenson/ruby-build.git
+    dest=/opt/rbenv/plugins/ruby-build accept_hostkey=yes
+
+- block:
+
+  - name: change group rbenv directory
+    file:
+      path=/opt/rbenv
+      group=rbenv
+      recurse=yes
+
+  - name: change mode rbenv directory
+    file:
+      path=/opt/rbenv
+      mode=g+rwxXs
+      recurse=yes
+
+  when: clone_rbenv_result.before == none
+
+- name: copy rbenv.sh
+  copy:
+    src=rbenv.sh
+    dest=/etc/profile.d/rbenv.sh
+    owner=root
+    group=root
+    mode=0644
+  register: copy_rbenv_result
+
+- name: copy sudores.rbenv
+  copy:
+    src=sudoers.rbenv
+    dest=/etc/sudoers.d/rbenv
+    owner=root
+    group=root
+    mode=0644
+
+- name: load rbenv.sh
+  shell: bash -lc "source /etc/profile.d/rbenv.sh"
+  when: copy_rbenv_result | changed
+
+- name: display list of all ruby verions
+  shell: bash -lc "rbenv versions"
+  register: display_list_result
+  changed_when: False
+  failed_when: False
+
+- name: install specific ruby version
+  shell: bash -lc "CONFIGURE_OPTS="--disable-install-rdoc" rbenv install {{ rbenv.ruby.version }}"
+  when: display_list_result.stdout.find(rbenv.ruby.version) == -1
+  register: install_specific_ruby_version_result
+
+- name: set global ruby version
+  shell: bash -lc "rbenv global {{ rbenv.ruby.version }} && rbenv rehash"
+  when: install_specific_ruby_version_result | changed
+
+- name: install gems
+  gem:
+    name={{ item.name }}
+    version={{ item.version | default(omit) }}
+    executable=/opt/rbenv/shims/gem
+    user_install=no
+  with_items: "{{ ruby_gems }}"
+

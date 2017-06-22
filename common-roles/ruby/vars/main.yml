@@ -1,0 +1,9 @@
+---
+ruby_gems:
+  - { name: bundler }
+
+rbenv:
+  users:
+    - rbenv
+  ruby:
+    version: 2.3.3
