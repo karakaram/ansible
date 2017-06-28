@@ -51,6 +51,7 @@ homebrew_cask_packages:
   - { name: appcleaner }
   - { name: atom }
   - { name: caffeine }
+  - { name: firefox }
   - { name: imageoptim }
   - { name: image-tool }
   - { name: intellij-idea }
