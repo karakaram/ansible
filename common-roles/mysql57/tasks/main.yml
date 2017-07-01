@@ -142,25 +142,6 @@
   tags:
     - mysql
 
-- name: remove anonymous user
-  mysql_user:
-    name: ""
-    host: "{{ item }}"
-    state: "absent"
-    login_user: root
-  with_items:
-    - localhost
-  tags:
-    - mysql
-
-- name: remove test database
-  mysql_db:
-    name: test
-    state: absent
-    login_user: root
-  tags:
-    - mysql
-
 - name: create database
   mysql_db:
     name: "{{ item.name }}"
