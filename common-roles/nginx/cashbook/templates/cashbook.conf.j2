@@ -1,18 +1,30 @@
 server {
     listen 80;
     server_name {{ cashbook.host }};
-    rewrite ^(.*)$ https://{{ cashbook.host }}$1 last;
+    rewrite ^ https://$server_name$request_uri? permanent;
 }
 
 server {
-    listen 443;
-    ssl on;
+    listen 443 ssl http2;
     server_name {{ cashbook.host }};
-    ssl_certificate /etc/letsencrypt/live/{{ wordpress.host }}/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/{{ wordpress.host }}/privkey.pem;
 
     root /var/www/{{ cashbook.host }}/current/web;
     charset utf-8;
+
+    ssl_certificate /etc/nginx/ssl/server.pem;
+    ssl_certificate_key /etc/nginx/ssl/server.key;
+
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout  5m;
+
+    ssl_ciphers 'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH !RC4';
+    ssl_prefer_server_ciphers on;
+
+    ssl_dhparam /etc/nginx/ssl/dhparam.pem;
+
+    add_header Strict-Transport-Security 'max-age=31536000; includeSubdomains';
+    add_header X-Content-Type-Options nosniff;
+    add_header X-Frame-Options DENY;
 
     location / {
         auth_basic "Restricted";
