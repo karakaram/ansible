@@ -47,3 +47,14 @@
     job="/usr/bin/php /var/www/{{ cashbook.host }}/current/app/console app:regular-payment --env=prod"
     state=present
   tags: crontab
+
+- name: certbot renew
+  cron:
+    name=certbot-renew
+    user=root
+    weekday="0"
+    hour="6"
+    minute="0"
+    job="certbot renew --pre-hook 'service nginx stop' --post-hook 'service nginx start'"
+    state=present
+  tags: crontab
