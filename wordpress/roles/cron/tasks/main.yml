@@ -44,6 +44,6 @@
     day="1"
     hour="0"
     minute="0"
-    job="/usr/bin/php /var/www/cashbook/current/app/console app:regular-payment --env=prod"
+    job="/usr/bin/php /var/www/{{ cashbook.host }}/current/app/console app:regular-payment --env=prod"
     state=present
   tags: crontab
