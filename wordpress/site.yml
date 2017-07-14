@@ -13,7 +13,7 @@
     - ../common-roles/mysql57
     - ../common-roles/nginx/install
     - ../common-roles/nginx/wordpress
-#    - ../common-roles/nginx/ssl
+#    - ../common-roles/nginx/cashbook
     - ../common-roles/php
     - cron
 #    - ../common-roles/postfix
