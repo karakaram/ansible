@@ -96,7 +96,6 @@
     state: enabled
   with_items:
     - smtp
-  notify: reload firewalld
+  notify: restart firewalld
   tags:
     - postfix
-    - debug
