@@ -11,6 +11,7 @@
     - ../common-roles/common/timezone
     - ../common-roles/common/vim
     - ../common-roles/mysql57
+    - ../common-roles/cerbot
     - ../common-roles/nginx/install
     - ../common-roles/nginx/wordpress
 #    - ../common-roles/nginx/cashbook
