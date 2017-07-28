@@ -42,6 +42,7 @@ homebrew_packages:
   - { name: readline }
   - { name: re2c }
   - { name: ssh-copy-id }
+  - { name: tfenv }
   - { name: tig }
   - { name: tree }
   - { name: wget }
@@ -51,6 +52,7 @@ homebrew_cask_packages:
   - { name: appcleaner }
   - { name: atom }
   - { name: caffeine }
+  - { name: docker }
   - { name: firefox }
   - { name: imageoptim }
   - { name: image-tool }
