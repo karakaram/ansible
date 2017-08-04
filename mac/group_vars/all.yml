@@ -34,6 +34,7 @@ homebrew_packages:
   - { name: nkf }
   - { name: openssl }
   - { name: openssl, state: linked, install_options: force }
+  - { name: packer }
   - { name: pcre }
   - { name: pyenv }
   - { name: qt5 }
