@@ -12,6 +12,7 @@ homebrew_packages:
   - { name: curl }
   - { name: curl, state: linked, install_options: force }
   - { name: diff-so-fancy }
+  - { name: fswatch }
   - { name: gettext }
   - { name: icu4c }
   - { name: icu4c, state: linked, install_options: force }
@@ -46,6 +47,7 @@ homebrew_packages:
   - { name: tfenv }
   - { name: tig }
   - { name: tree }
+  - { name: unison }
   - { name: wget }
   - { name: zsh, install_options: disable-etcdir }
 homebrew_cask_packages:
