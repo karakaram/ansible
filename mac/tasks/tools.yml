@@ -24,6 +24,12 @@
     path: ~/.zpreztorc
     state: link
 
+- name: Get docker-zsh-completion for Prezto
+  get_url:
+    url: https://raw.githubusercontent.com/felixr/docker-zsh-completion/master/_docker
+    dest: ~/.zprezto/modules/completion/external/src/_docker
+  tags: debug
+
 # zsh
 - name: is exists .zshrc.mac
   stat:
