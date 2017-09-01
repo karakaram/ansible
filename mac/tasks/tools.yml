@@ -43,22 +43,6 @@
     state: link
   when: f.stat.exists
 
-- name: is exists icloud/.zshrc.local
-  stat:
-    path: ~/icloud/conf/dotfiles/.zshrc.local
-  register: icloud-zshrc-local
-
-- name: is exists ~/.zshrc.local
-  stat:
-    path: ~/icloud/conf/dotfiles/.zshrc.local
-  register: zshrc-local
-
-- name: copy .zshrc.local
-  file:
-    src: ~/icloud/conf/dotfiles/.zshrc.local
-    dest: ~/.zshrc.local
-  when: icloud-zshrc-local.stat.exists and zshrc-local.stat.exists == False
-
 # solarized
 - name: clone Solarized
   git:
