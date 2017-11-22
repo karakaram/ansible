@@ -127,17 +127,3 @@
     - vagrant-global-status
     - vagrant-bindfs
   when: item in f.stdout_lines
-
-# bin/hidden-file
-- name: is exists hidden-file
-  stat:
-    path: ~/icloud/bin/hidden-file
-  register: f
-
-- name: link hidden-file
-  file:
-    src: ~/icloud/bin/hidden-file
-    dest: ~/bin/hidden-file
-    state: link
-  when: f.stat.exists
-
