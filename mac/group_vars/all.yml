@@ -60,7 +60,6 @@ homebrew_cask_packages:
   - { name: imageoptim }
   - { name: image-tool }
   - { name: intellij-idea }
-  - { name: java }
   - { name: gimp }
   - { name: google-chrome }
   - { name: google-japanese-ime }
