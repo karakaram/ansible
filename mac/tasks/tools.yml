@@ -127,3 +127,11 @@
     - vagrant-global-status
     - vagrant-bindfs
   when: item in f.stdout_lines
+
+# generate-ssh-config-aws
+- name: link bin/generate-ssh-config-aws
+  file:
+    src: ~/icloud/bin/generate-ssh-config-aws
+    dest: ~/bin/generate-aws-ssh-config-aws
+    state: link
+    force: yes
