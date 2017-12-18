@@ -10,12 +10,10 @@ homebrew_packages:
   - { name: automake }
   - { name: cask }
   - { name: curl }
-  - { name: curl, state: linked, install_options: force }
   - { name: diff-so-fancy }
   - { name: fswatch }
   - { name: gettext }
   - { name: icu4c }
-  - { name: icu4c, state: linked, install_options: force }
   - { name: intltool }
   - { name: jpeg }
   - { name: jq }
@@ -26,7 +24,6 @@ homebrew_packages:
   - { name: libevent }
   - { name: libtool }
   - { name: libxml2 }
-  - { name: libxml2, state: linked, install_options: force }
   - { name: mcrypt }
   - { name: mhash }
   - { name: mysql }
@@ -34,7 +31,6 @@ homebrew_packages:
   - { name: nodebrew }
   - { name: nkf }
   - { name: openssl }
-  - { name: openssl, state: linked, install_options: force }
   - { name: packer }
   - { name: pcre }
   - { name: pyenv }
