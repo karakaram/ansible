@@ -2,7 +2,6 @@ homebrew_taps:
   - homebrew/binary
   - homebrew/dupes
   - caskroom/cask
-  # - caskroom/versions
   - splhack/splhack
   - delphinus/macvim-kaoriya
 homebrew_packages:
