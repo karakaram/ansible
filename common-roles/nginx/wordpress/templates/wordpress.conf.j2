@@ -7,16 +7,37 @@ server {
 server {
     listen 80;
     server_name {{ wordpress.host_without_www }};
-    rewrite ^(.*)$ http://{{ wordpress.host }}$1 last;
+    rewrite ^(.*)$ https://{{ wordpress.host }}$1 last;
 }
 
 server {
     listen 80;
     server_name {{ wordpress.host }};
+    rewrite ^(.*)$ https://{{ wordpress.host }}$1 last;
+}
+
+server {
+    listen 443 ssl http2;
+    server_name {{ wordpress.host }};
     root /var/www/{{ wordpress.host }};
     index index.php;
     charset utf-8;
     fastcgi_read_timeout {{ nginx.fastcgi_read_timeout }};
+
+    ssl_certificate /etc/nginx/ssl/server.pem;
+    ssl_certificate_key /etc/nginx/ssl/server.key;
+
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout  5m;
+
+    ssl_ciphers 'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH !RC4';
+    ssl_prefer_server_ciphers on;
+
+    ssl_dhparam /etc/nginx/ssl/dhparam.pem;
+
+    add_header Strict-Transport-Security 'max-age=31536000; includeSubdomains';
+    add_header X-Content-Type-Options nosniff;
+    add_header X-Frame-Options DENY;
 
     access_log on;
     access_log  /var/log/nginx/{{ wordpress.host }}.frontend.access.log main;
@@ -75,6 +96,7 @@ server {
         proxy_cache        wpcache;
         proxy_cache_key    "$scheme://$host$request_uri$mobile";
         proxy_cache_valid  200 302 360m;
+        proxy_set_header   X-Forwarded-Proto https;
         proxy_pass         http://backend;
     }
 }

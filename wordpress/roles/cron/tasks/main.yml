@@ -3,7 +3,7 @@
     name=wp-cron
     user={{ user.name }}
     minute="*/15"
-    job="wget -q -O -T 900 - http://{{ wordpress.host }}/wp-cron.php?doing_wp_cron >/dev/null 2>&1"
+    job="wget -q -O -T 900 - https://{{ wordpress.host }}/wp-cron.php?doing_wp_cron >/dev/null 2>&1"
     state=present
   tags: crontab
 
