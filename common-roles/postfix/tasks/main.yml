@@ -89,7 +89,7 @@
   tags:
     - postfix
 
-- name: updating firewall rules
+- name: change firewall rules
   firewalld:
     service: "{{ item }}"
     permanent: true

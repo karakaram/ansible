@@ -1,7 +1,7 @@
 ---
 - include: ../common-roles/common/firewalld/tasks/main.yml
 
-- name: updating firewall rules
+- name: change firewall rules
   firewalld:
     service={{ item }}
     permanent=true
