@@ -23,7 +23,6 @@ homebrew_packages:
   - { name: libxml2 }
   - { name: mcrypt }
   - { name: mhash }
-  - { name: nginx }
   - { name: nodebrew }
   - { name: nkf }
   - { name: openssl }
