@@ -2,8 +2,6 @@ homebrew_taps:
   - homebrew/binary
   - homebrew/dupes
   - caskroom/cask
-  - splhack/splhack
-  - delphinus/macvim-kaoriya
 homebrew_packages:
   - { name: autoconf }
   - { name: automake }
@@ -62,8 +60,6 @@ homebrew_cask_packages:
   - { name: karabiner-elements }
   - { name: keyboardcleantool }
   - { name: kindle }
-  - { name: macvim-kaoriya, install_options: override-system-vim }
-  - { name: macvim-kaoriya }
   - { name: mysqlworkbench }
   - { name: night-owl }
   - { name: shiftit }
