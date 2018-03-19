@@ -1,5 +1,4 @@
 homebrew_taps:
-  - homebrew/binary
   - caskroom/cask
 homebrew_packages:
   - { name: autoconf }
