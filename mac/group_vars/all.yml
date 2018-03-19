@@ -23,7 +23,6 @@ homebrew_packages:
   - { name: libxml2 }
   - { name: mcrypt }
   - { name: mhash }
-  - { name: mysql }
   - { name: nginx }
   - { name: nodebrew }
   - { name: nkf }
@@ -60,7 +59,6 @@ homebrew_cask_packages:
   - { name: karabiner-elements }
   - { name: keyboardcleantool }
   - { name: kindle }
-  - { name: mysqlworkbench }
   - { name: night-owl }
   - { name: shiftit }
   - { name: skitch }
