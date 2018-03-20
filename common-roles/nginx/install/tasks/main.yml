@@ -27,6 +27,16 @@
     - nginx
     - nginx-change-port
 
+- name: change firewall rules
+  firewalld:
+    port: "{{ nginx.port }}"
+    permanent: true
+    state: enabled
+  notify: restart firewalld
+  tags:
+    - nginx
+    - nginx-change-port
+
 - name: change boot script
   replace:
     dest: /usr/lib/systemd/system/nginx.service

@@ -8,7 +8,6 @@
     state=enabled
   with_items:
     - ssh
-    - http
   tags: firewalld
 
 - name: copy ssh.xml
