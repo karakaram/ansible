@@ -13,6 +13,15 @@
   notify: restart nginx
   tags: nginx
 
+- name: change firewall rules
+  firewalld:
+    service: https
+    permanent: true
+    state: enabled
+  notify: restart firewalld
+  tags:
+    - nginx
+
 - name: create tmp directory
   file:
     path={{ item }}
