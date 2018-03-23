@@ -22,6 +22,14 @@
   tags:
     - nginx
 
+- name: create ssl directory
+  file:
+    path={{ item }}
+    state=directory
+  with_items:
+    - /etc/nginx/ssl
+  tags: nginx
+
 - name: create tmp directory
   file:
     path={{ item }}
