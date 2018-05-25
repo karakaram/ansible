@@ -1,10 +1,3 @@
-# wordpress
-
-```
-cd wordpress
-vagrant up
-```
-
 # elastic-stack
 
 ```
@@ -17,11 +10,4 @@ vagrant up
 ```
 cd jenkins
 vagrant up
-```
-
-# mac
-
-```
-cd mac
-ansible-playbook site.yml -i hosts
 ```

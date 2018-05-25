@@ -1,6 +1,0 @@
----
-- name: restart postfix
-  service: name=postfix enabled=yes state=restarted
-
-- name: restart firewalld
-  service: name=firewalld enabled=yes state=restarted

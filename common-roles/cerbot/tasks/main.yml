@@ -1,4 +1,0 @@
----
-- name: install cerbot
-  yum:
-    name: certbot

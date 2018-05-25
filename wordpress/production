@@ -1,5 +1,0 @@
-[wordpress]
-conoha
-
-[production:children]
-wordpress
